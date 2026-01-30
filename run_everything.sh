@@ -19,22 +19,21 @@ if [ $(python --version | cut -d' ' -f2 | cut -d'.' -f1) -lt 3 ] || [ $(python -
     exit 1
 fi         
 
-## Ensure jupyter is installed
-which jupyter
-if [ $? -ne 0 ]; then
-    echo "Jupyter must be on path"
+# ## Ensure torch is installed and >= 2.3
+if ! python -c "import torch; assert torch.__version__ >= '2.3.0'"; then
+    echo "Torch version must be at least 2.3.0"
     exit 1
 fi
 
-# ## Install dependencies
-# pip install --upgrade pip
-# python -m pip install -r requirements.txt
+## Install dependencies
+pip install --upgrade pip
+python -m pip install -r requirements.txt
 
-## Download datasets, train models, and set up experiments
+## Download datasets and train models and set up experiments
 python setup_experiments.py
 
 ## Run experiments on the networks trained on synthetic data
-python run_synthetic.py
+python run_synthetic.py 0 235
 
 ## Compute diameter bounds for the corresponding polyhedral complexes
 python diameter_bounds.py
@@ -44,5 +43,5 @@ python run_real.py
 
 ## Run the notebooks in the visualization folder to generate the plots from the paper
 for notebook in notebooks/*.ipynb; do
-    python -m jupyter nbconvert --to notebook --execute $notebook --inplace --log-level=INFO
+    python -m jupyter nbconvert --to notebook --execute "$notebook" --inplace --log-level=INFO
 done
