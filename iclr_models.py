@@ -21,9 +21,6 @@ def get_children(module):
     return flat_children
 
 
-## TODO: Move
-
-
 def get_model(name, **kwargs):
     if name == "mnist_cnn":
         return NN(
