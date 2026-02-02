@@ -117,7 +117,6 @@ def get_california_housing_regression(train=True):
     housing.data = housing.data / housing.data.std(axis=0)
     housing = housing.data.merge(housing.target, left_index=True, right_index=True)
     train_df, test_df = train_test_split(housing, test_size=0.2, random_state=1)
-    print("Target Column:", housing.columns[-1])
     return Dataset(
         [
             (
